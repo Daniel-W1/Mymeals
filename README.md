@@ -16,12 +16,6 @@ MyMeals is a mobile application that helps users discover nearby restaurants, ex
 2. Install dependencies: `flutter pub get`
 3. Run the app: `flutter run`
 
-## Screenshots
-
-![Screenshot 1](screenshots/screenshot1.png)
-![Screenshot 2](screenshots/screenshot2.png)
-![Screenshot 3](screenshots/screenshot3.png)
-
 ## Contributing
 
 Contributions are welcome! Please follow these steps to contribute:
