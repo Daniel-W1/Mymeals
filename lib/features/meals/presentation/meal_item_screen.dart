@@ -25,10 +25,24 @@ class MealCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-            height: 200.0,
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.0),
+                topRight: Radius.circular(8.0),
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.0),
+                topRight: Radius.circular(8.0),
+              ),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                height: 200.0,
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -43,20 +57,31 @@ class MealCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8.0),
-                Text(
-                  'Restaurant: $restaurantName',
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                Text(
-                  'Address: $restaurantAddress',
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                SizedBox(height: 8.0),
-                if (description != null)
-                  Text(
-                    description!,
+                ListTile(
+                  title: Text(
+                    'Restaurant:',
                     style: TextStyle(fontSize: 14.0),
                   ),
+                  subtitle: Text(
+                    restaurantName,
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Address:',
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                  subtitle: Text(
+                    restaurantAddress,
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  description ?? 'No description available.',
+                  style: TextStyle(fontSize: 14.0),
+                ),
               ],
             ),
           ),
