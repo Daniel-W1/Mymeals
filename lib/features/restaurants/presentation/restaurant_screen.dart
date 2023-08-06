@@ -20,11 +20,26 @@ class RestaurantsPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
         ),
       ),
-      body: ListView.builder(
-        itemCount: restaurants.length,
-        itemBuilder: (context, index) {
-          return RestaurantTile(restaurant: restaurants[index]);
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await resProvider.fetchRestaurants(); // Implement the method to fetch restaurants again.
         },
+        child: restaurants.isEmpty
+            ? Center(
+                child: Text('No restaurants available.'),
+              )
+            : ListView.builder(
+                itemCount: restaurants.length,
+                itemBuilder: (context, index) {
+                  return RestaurantTile(restaurant: restaurants[index]);
+                },
+              ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Implement the navigation to the add restaurant screen here.
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
