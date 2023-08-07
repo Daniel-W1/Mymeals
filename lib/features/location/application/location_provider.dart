@@ -9,7 +9,7 @@ class LocationProvider with ChangeNotifier {
   Position? get currentLocation => _currentLocation;
 
   Future<void> syncLocation(BuildContext context) async {
-    _currentLocation = await determinePosition(context);
+    _currentLocation = await determinePosition();
     notifyListeners();
   }
 

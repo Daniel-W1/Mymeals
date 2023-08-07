@@ -1,73 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:go_router/go_router.dart';
 
-Future<Position> determinePosition(BuildContext context) async {
-  try {
-    Position position = await Geolocator.getCurrentPosition();
-    return position;
-  } on PlatformException catch (e) {
-    if (e.code == 'PERMISSION_DENIED') {
-      // Handle permission denied error
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text('Location Permission'),
-          content: Text('Location permissions are denied.'),
-          actions: [
-            ElevatedButton(
-              child: Text('OK'),
-              onPressed: () {
-                context.go('/');
-              },
-            ),
-          ],
-        ),
-      );
-    } else if (e.code == 'SERVICE_STATUS_ERROR') {
-      // Handle location services disabled error
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text('Location Services'),
-          content: Text('Location services are disabled.'),
-          actions: [
-            ElevatedButton(
-              child: Text('Open Settings'),
-              onPressed: () {
-                Geolocator.openLocationSettings();
-                context.go('/');
-              },
-            ),
-            ElevatedButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                context.go('/');
-              },
-            ),
-          ],
-        ),
-      );
-    } else {
-      // Handle other errors
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text('Error'),
-          content: Text(e.message ?? ""),
-          actions: [
-            ElevatedButton(
-              child: Text('OK'),
-              onPressed: () {
-                context.go('/');
-              },
-            ),
-          ],
-        ),
-      );
+Future<Position?> determinePosition() async {
+  LocationPermission permission;
+  permission = await Geolocator.checkPermission();
+  var check = await Geolocator.isLocationServiceEnabled();
+  print('we are here asking permissions');
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location Not Available');
     }
-
-    return Future.error('Location services are disabled.');
+  } else if (!check) {
+    throw Exception('Error');
   }
+  var result = await Geolocator.getCurrentPosition();
+  print(result);
+  return result;
 }

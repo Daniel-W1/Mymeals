@@ -68,6 +68,7 @@ class MealProvider extends ChangeNotifier {
       totalMeals.addAll(response.sublist(0, val));
     }
 
+    await storeMealsToFirestore(totalMeals);
     _meals = totalMeals;
     notifyListeners();
   }
@@ -86,5 +87,16 @@ class MealProvider extends ChangeNotifier {
         .toList();
 
     await getMealFromUrls(resUrls);
+  }
+
+  Future<void> storeMealsToFirestore(List<Meal> meals) async {
+    try {
+      for (var meal in meals) {
+        final mealData = meal.toJson();
+        await _mealsCollection.doc(meal.id).set(mealData);
+      }
+    } catch (e) {
+      print('Error storing meals in Firestore: $e');
+    }
   }
 }

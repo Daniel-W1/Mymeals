@@ -1,3 +1,5 @@
+import 'package:my_meals/features/meals/domain/meal_rating.dart';
+
 class Meal {
   String? id;
   final String name;
@@ -9,6 +11,8 @@ class Meal {
   final String restaurantName;
   final String restaurantAddress;
   String? imageUrl;
+  // create a rating for each meal with userid who rated it
+  List<MealRating>? ratings;
 
   Meal({
     this.id,
@@ -21,6 +25,7 @@ class Meal {
     required this.restaurantName,
     required this.restaurantAddress,
     this.restaurantId,
+    this.ratings,
     // Initialize other meal-related fields here
   });
 
@@ -38,6 +43,12 @@ class Meal {
           .map((restriction) => restriction as String)
           .toList(),
       imageUrl: json['imageUrl'] as String?,
+      ratings: (json['ratings'] as List<dynamic>?)
+          ?.map((rating) => MealRating(
+                rating: rating['rating'] as int,
+                userId: rating['userId'] as String,
+              ))
+          .toList() ?? [],
     );
   }
 
@@ -53,6 +64,7 @@ class Meal {
       'restaurantId': restaurantId,
       'restaurantName': restaurantName,
       'restaurantAddress': restaurantAddress,
+      'ratings': ratings?.map((rating) => rating.toJson()).toList(),
     };
   }
 }

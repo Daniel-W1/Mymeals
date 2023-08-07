@@ -15,7 +15,8 @@ class UserProvider extends ChangeNotifier {
 
   User? get user => _user;
 
-  Future<void> createUser(String name, String email) async {
+  Future<void> createUser(
+      String name, String email, int age, String sex, String preference) async {
     final preferenceData = Preference(
       dietaryRestrictions: [],
       favoriteCuisines: [],
@@ -33,7 +34,13 @@ class UserProvider extends ChangeNotifier {
       // print(preferenceDocRef.id);
 
       // Create user document
-      final user = User(pid: preferenceDocRef.id, name: name, email: email);
+      final user = User(
+          pid: preferenceDocRef.id,
+          name: name,
+          email: email,
+          sex: sex,
+          age: age,
+          preference: preference);
       final userData = user.toJson();
       await _usersCollection.add(userData);
 

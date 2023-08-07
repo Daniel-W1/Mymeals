@@ -40,12 +40,14 @@ final appRouter = GoRouter(routes: [
       final resProvider = context.read<RestaurantProvider>();
       final locationProvider = context.read<LocationProvider>();
 
-      final loca = locationProvider.currentLocation;
+      var loca = locationProvider.currentLocation;
 
       if (loca == null) {
         await locationProvider.syncLocation(context);
+        loca = locationProvider.currentLocation;
       }
 
+      print('so the location we got is $loca');
       final mealProvider = context.read<MealProvider>();
 
       if (resProvider.restaurants == null) {

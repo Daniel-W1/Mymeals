@@ -77,8 +77,6 @@ class LoginScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         final authProvider = context.read<AuthProvider>();
-                        final locationProvider =
-                            context.read<LocationProvider>();
 
                         await authProvider.login(
                             emailController.text.trim(),
@@ -86,11 +84,6 @@ class LoginScreen extends StatelessWidget {
                             context,
                             showSnackbar);
 
-                        await locationProvider.syncLocation(context);
-
-                        print(locationProvider.currentLocation);
-                        print(
-                            '-------------------------------------------------');
                       },
                       child: const Text('Login'),
                     ),
