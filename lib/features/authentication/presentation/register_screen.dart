@@ -9,18 +9,33 @@ class SignupScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController sexController = TextEditingController();
 
   void showSnackbar(BuildContext context, String message) {
     final snackBar = SnackBar(
       backgroundColor: message.contains('success') ? Colors.green : Colors.red,
-      content: Text(message,
-          style: const TextStyle(
-            color: Colors.black,
-          )),
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Colors.black,
+        ),
+      ),
       duration: const Duration(seconds: 2),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  final List<String> preferences = [
+    'Vegan',
+    'Vegetarian',
+    'Non-Vegetarian',
+    'Anything LoL',
+  ]; // List of available preferences
+
+  final List<String> sexes = ['MALE', 'FEMALE']; // List of available sexes
+  String selectedPreference = 'Vegan'; // Default selected preference
+  String selectedSex = 'MALE'; // Default selected sex
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +72,7 @@ class SignupScreen extends StatelessWidget {
                 decoration: const InputDecoration(
                   labelText: 'Full name',
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person), // Add mail button
+                  prefixIcon: Icon(Icons.person),
                 ),
               ),
               const SizedBox(height: 10.0),
@@ -66,7 +81,7 @@ class SignupScreen extends StatelessWidget {
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.mail), // Add mail button
+                  prefixIcon: Icon(Icons.mail),
                 ),
               ),
               const SizedBox(height: 10.0),
@@ -75,13 +90,70 @@ class SignupScreen extends StatelessWidget {
                 decoration: const InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock), // Add lock button
+                  prefixIcon: Icon(Icons.lock),
                 ),
                 obscureText: true,
               ),
+
+              // Age TextFormField
+              const SizedBox(height: 10.0),
+              TextFormField(
+                controller: ageController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Age',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.calendar_today),
+                ),
+              ),
+
+              // Sex DropdownButtonFormField
+              const SizedBox(height: 10.0),
+              DropdownButtonFormField<String>(
+                value: selectedSex,
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    selectedSex = newValue;
+                  }
+                },
+                items: sexes.map((sex) {
+                  return DropdownMenuItem<String>(
+                    value: sex,
+                    child: Text(sex),
+                  );
+                }).toList(),
+                decoration: const InputDecoration(
+                  labelText: 'Sex',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.person_outline),
+                ),
+              ),
+
+              // Preference DropdownButtonFormField
+              const SizedBox(height: 10.0),
+              DropdownButtonFormField<String>(
+                value: selectedPreference,
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    selectedPreference = newValue;
+                  }
+                },
+                items: preferences.map((preference) {
+                  return DropdownMenuItem<String>(
+                    value: preference,
+                    child: Text(preference),
+                  );
+                }).toList(),
+                decoration: const InputDecoration(
+                  labelText: 'Preference',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.food_bank),
+                ),
+              ),
+
               const SizedBox(height: 20.0),
               SizedBox(
-                width: double.infinity, // Make button width larger
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
                     final authProvider = context.read<AuthProvider>();
@@ -91,24 +163,30 @@ class SignupScreen extends StatelessWidget {
                     final data = {
                       'name': nameController.text.trim(),
                       'email': emailController.text.trim(),
-                      'password': passwordController.text.trim()
+                      'password': passwordController.text.trim(),
+                      'age': ageController.text.trim(),
+                      'sex': selectedSex,
+                      'preference': selectedPreference,
                     };
 
                     await userProvider.createUser(
-                        data['name'] ?? "", data['email'] ?? "");
+                      data['name'] ?? "",
+                      data['email'] ?? "",
+                      int.tryParse(data['age'] ?? "") ?? 20,
+                      data['sex'] ?? '',
+                      data['preference'] ?? '',
+                    );
+
                     await authProvider.register(data, context, showSnackbar);
                     await locationProvider.syncLocation(context);
-
-                    print('----------------------------------------');
-                    print(locationProvider.currentLocation);
-                  }, // Call _signup function to create a new account
+                  },
                   child: const Text('Sign Up'),
                 ),
               ),
+
               const SizedBox(height: 10.0),
               GestureDetector(
                 onTap: () {
-                  // Add navigation logic to navigate back to the login screen
                   context.go('/signin');
                 },
                 child: const Text(

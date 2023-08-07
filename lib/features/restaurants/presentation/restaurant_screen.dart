@@ -3,12 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:my_meals/features/restaurants/application/restaurant_provider.dart';
 import 'package:my_meals/features/restaurants/presentation/tile_screen.dart';
 import 'package:provider/provider.dart';
+import '../../location/application/location_provider.dart';
 
 class RestaurantsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final resProvider = context.read<RestaurantProvider>();
     final restaurants = resProvider.restaurants;
+    final locProvider = context.read<LocationProvider>();
+    final location = locProvider.currentLocation!;
 
     return Scaffold(
       appBar: AppBar(
@@ -22,7 +25,7 @@ class RestaurantsPage extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await resProvider.fetchRestaurants(); // Implement the method to fetch restaurants again.
+          await resProvider.getRestaurants(location.latitude, location.longitude); // Implement the method to fetch restaurants again.
         },
         child: restaurants.isEmpty
             ? Center(
