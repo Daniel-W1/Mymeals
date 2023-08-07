@@ -39,7 +39,6 @@ getRestuarantMeals(String url, someData) async {
         description: '',
         cuisineType: '',
         mealType: '',
-        dietaryRestrictions: [],
         imageUrl: imageUrl ?? '',
         restaurantName: someData['name'],
         restaurantAddress: someData['address'],

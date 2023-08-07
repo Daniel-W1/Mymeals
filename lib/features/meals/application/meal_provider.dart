@@ -68,8 +68,8 @@ class MealProvider extends ChangeNotifier {
       totalMeals.addAll(response.sublist(0, val));
     }
 
-    await storeMealsToFirestore(totalMeals);
     _meals = totalMeals;
+    await storeMealsToFirestore(totalMeals);
     notifyListeners();
   }
 
@@ -97,6 +97,19 @@ class MealProvider extends ChangeNotifier {
       }
     } catch (e) {
       print('Error storing meals in Firestore: $e');
+    }
+  }
+
+  Future<void> getAllMealsFromDatabase() async {
+    try {
+      final snapshot = await _mealsCollection.get();
+      _meals = snapshot.docs.map((doc) {
+        final mealData = doc.data() as Map<String, dynamic>;
+        print(mealData);
+        return Meal.fromJson(mealData);
+      }).toList();
+    } catch (e) {
+      print('Error getting meals from Firestore: $e');
     }
   }
 }

@@ -6,7 +6,6 @@ class Meal {
   final String description;
   final String cuisineType;
   final String mealType;
-  final List<String> dietaryRestrictions;
   String? restaurantId;
   final String restaurantName;
   final String restaurantAddress;
@@ -21,7 +20,6 @@ class Meal {
     required this.description,
     required this.cuisineType,
     required this.mealType,
-    required this.dietaryRestrictions,
     required this.restaurantName,
     required this.restaurantAddress,
     this.restaurantId,
@@ -39,9 +37,6 @@ class Meal {
       description: json['description'] as String,
       cuisineType: json['cuisineType'] as String,
       mealType: json['mealType'] as String,
-      dietaryRestrictions: (json['dietaryRestrictions'] as List<dynamic>)
-          .map((restriction) => restriction as String)
-          .toList(),
       imageUrl: json['imageUrl'] as String?,
       ratings: (json['ratings'] as List<dynamic>?)
           ?.map((rating) => MealRating(
@@ -60,7 +55,6 @@ class Meal {
       'description': description,
       'cuisineType': cuisineType,
       'mealType': mealType,
-      'dietaryRestrictions': dietaryRestrictions,
       'restaurantId': restaurantId,
       'restaurantName': restaurantName,
       'restaurantAddress': restaurantAddress,

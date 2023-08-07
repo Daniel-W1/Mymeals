@@ -47,6 +47,7 @@ dependencies:
   yelp_fusion_client: ^0.2.0+3-hotfix
   beautiful_soup_dart: ^0.3.0
   http: ^0.13.6
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
