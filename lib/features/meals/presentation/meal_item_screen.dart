@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_meals/features/meals/presentation/meal_detail_screen.dart';
 
 class MealCard extends StatelessWidget {
   final String imageUrl;
@@ -18,74 +19,96 @@ class MealCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       elevation: 4.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8.0),
-                topRight: Radius.circular(8.0),
+      child: InkWell(
+        onTap: () {
+          // Navigate to the MealDetailPage when the card is tapped.
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MealDetailPage(
+                imageUrl: imageUrl,
+                mealName: mealName,
+                description: description,
+                restaurantName: restaurantName,
+                restaurantAddress: restaurantAddress,
               ),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8.0),
-                topRight: Radius.circular(8.0),
+          );
+        },
+        borderRadius: BorderRadius.circular(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  topRight: Radius.circular(8.0),
+                ),
               ),
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                height: 200.0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  topRight: Radius.circular(8.0),
+                ),
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  height: 200.0,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  mealName,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    mealName,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 8.0),
-                ListTile(
-                  title: Text(
-                    'Restaurant:',
+                  SizedBox(height: 6.0),
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                    title: Text(
+                      'Restaurant:',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    subtitle: Text(
+                      restaurantName,
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                    title: Text(
+                      'Address:',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    subtitle: Text(
+                      restaurantAddress,
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                  ),
+                  SizedBox(height: 6.0),
+                  Text(
+                    description ??
+                        'This is a meal provided by ${this.restaurantName} which is located ${this.restaurantAddress}. Try it out and do tell us your experience!',
                     style: TextStyle(fontSize: 14.0),
                   ),
-                  subtitle: Text(
-                    restaurantName,
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Address:',
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                  subtitle: Text(
-                    restaurantAddress,
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  description ?? 'No description available.',
-                  style: TextStyle(fontSize: 14.0),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
