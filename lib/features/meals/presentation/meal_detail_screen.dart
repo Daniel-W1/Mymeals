@@ -1,7 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:my_meals/features/authentication/application/auth_provider.dart';
+import 'package:my_meals/features/meals/application/meal_provider.dart';
+import 'package:my_meals/features/meals/domain/meal.dart';
+import 'package:my_meals/features/meals/domain/meal_rating.dart';
+import 'package:provider/provider.dart';
 
 class MealDetailPage extends StatefulWidget {
+  final String id;
   final String imageUrl;
   final String mealName;
   final String? description;
@@ -14,6 +22,7 @@ class MealDetailPage extends StatefulWidget {
     this.description,
     required this.restaurantName,
     required this.restaurantAddress,
+    required this.id,
   });
 
   @override
@@ -21,7 +30,7 @@ class MealDetailPage extends StatefulWidget {
 }
 
 class _MealDetailPageState extends State<MealDetailPage> {
-  double rating = 3.0;
+  double rating = 3;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,8 +138,34 @@ class _MealDetailPageState extends State<MealDetailPage> {
                       SizedBox(width: 16.0),
                       // rate button
                       ElevatedButton(
-                        onPressed: () {
-                          
+                        onPressed: () async {
+                          // find the meal using the id and update the rating
+                          // this is a dummy implementation
+                          final user = context.read<AuthProvider>().user;
+                          if (user == null) {
+                            return;
+                          }
+
+                          await MealProvider().updateMeal(Meal(
+                            id: widget.id,
+                            imageUrl: widget.imageUrl,
+                            name: widget.mealName,
+                            description: widget.description ?? "",
+                            restaurantName: widget.restaurantName,
+                            restaurantAddress: widget.restaurantAddress,
+                            ratings: [
+                              MealRating(
+                                  rating: rating.round(), userId: user.uid)
+                            ],
+                            cuisineType: "",
+                            mealType: "",
+                          ));
+                          // show a snackbar to indicate that the rating has been updated
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Rating updated!'),
+                            ),
+                          );
                         },
                         child: Text('Rate'),
                       ),

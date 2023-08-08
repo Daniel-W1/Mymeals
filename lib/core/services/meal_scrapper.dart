@@ -35,14 +35,14 @@ getRestuarantMeals(String url, someData) async {
       final name = nameContainer?.text;
 
       meals.add(Meal(
-        name: name ?? '',
-        description: '',
-        cuisineType: '',
-        mealType: '',
-        imageUrl: imageUrl ?? '',
-        restaurantName: someData['name'],
-        restaurantAddress: someData['address'],
-      ));
+          name: name ?? '',
+          description: '',
+          cuisineType: '',
+          mealType: '',
+          imageUrl: imageUrl ?? '',
+          restaurantName: someData['name'],
+          restaurantAddress: someData['address'],
+          id: someData['name'] + someData['address'] + name ?? ""));
     }
 
     return meals;

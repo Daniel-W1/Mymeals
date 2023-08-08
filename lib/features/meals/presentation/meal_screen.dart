@@ -10,7 +10,7 @@ class MealsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mealProvider = context.read<MealProvider>();
-    final meals = mealProvider.meals;
+    final meals = mealProvider.meals ?? [];
 
     return Scaffold(
       // add an AppBar with back button
@@ -29,9 +29,13 @@ class MealsScreen extends StatelessWidget {
           ListView.builder(
         itemCount: meals.length,
         itemBuilder: (context, index) {
+          print(meals[index].id!);
+          print('-----------------');
+          print(meals.length);
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             child: MealCard(
+              id: meals[index].id!,
               imageUrl: meals[index].imageUrl!,
               mealName: meals[index].name,
               restaurantAddress: meals[index].restaurantAddress,

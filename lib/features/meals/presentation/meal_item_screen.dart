@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_meals/features/meals/presentation/meal_detail_screen.dart';
 
 class MealCard extends StatelessWidget {
+  final String id;
   final String imageUrl;
   final String mealName;
   final String? description;
@@ -11,6 +12,7 @@ class MealCard extends StatelessWidget {
   const MealCard({
     required this.imageUrl,
     required this.mealName,
+    required this.id,
     this.description,
     required this.restaurantName,
     required this.restaurantAddress,
@@ -19,7 +21,7 @@ class MealCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
       elevation: 4.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
@@ -31,6 +33,7 @@ class MealCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => MealDetailPage(
+                id: id,
                 imageUrl: imageUrl,
                 mealName: mealName,
                 description: description,
@@ -64,7 +67,8 @@ class MealCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -2,14 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:my_meals/core/services/meal_scrapper.dart';
 import 'package:my_meals/features/meals/domain/meal.dart';
+import 'package:my_meals/features/meals/domain/meal_rating.dart';
 
 class MealProvider extends ChangeNotifier {
   final CollectionReference _mealsCollection =
       FirebaseFirestore.instance.collection('meals');
 
   // create a meals and getter for the meals
-  List<Meal> _meals = [];
-  List<Meal> get meals => _meals;
+  List<Meal>? _meals = [];
+  List<Meal>? get meals => _meals;
 
   Future<void> createMeal(Meal meal) async {
     final mealData = meal.toJson();
@@ -24,7 +25,6 @@ class MealProvider extends ChangeNotifier {
 
   Future<void> updateMeal(Meal meal) async {
     final mealData = meal.toJson();
-
     try {
       await _mealsCollection.doc(meal.id).update(mealData);
     } catch (e) {
@@ -61,6 +61,7 @@ class MealProvider extends ChangeNotifier {
 
   getMealFromUrls(resUrls) async {
     final totalMeals = <Meal>[];
+
     for (var urllist in resUrls) {
       final response = await getRestuarantMeals(urllist[0], urllist[1]);
       // response is a list of meals from the restaurant, so add them to totalMeals
@@ -68,8 +69,14 @@ class MealProvider extends ChangeNotifier {
       totalMeals.addAll(response.sublist(0, val));
     }
 
-    _meals = totalMeals;
+    print(totalMeals.length);
     await storeMealsToFirestore(totalMeals);
+    final res = await getAllMealsFromDatabase();
+    print(res.length);
+    print(totalMeals.length);
+    print('lengths');
+
+    _meals = res;
     notifyListeners();
   }
 
@@ -91,8 +98,11 @@ class MealProvider extends ChangeNotifier {
 
   Future<void> storeMealsToFirestore(List<Meal> meals) async {
     try {
+      var cnt = 0;
       for (var meal in meals) {
         final mealData = meal.toJson();
+        print(cnt++);
+        print(mealData);
         await _mealsCollection.doc(meal.id).set(mealData);
       }
     } catch (e) {
@@ -100,16 +110,18 @@ class MealProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getAllMealsFromDatabase() async {
+  Future<List<Meal>> getAllMealsFromDatabase() async {
     try {
       final snapshot = await _mealsCollection.get();
-      _meals = snapshot.docs.map((doc) {
-        final mealData = doc.data() as Map<String, dynamic>;
-        print(mealData);
+      final res = snapshot.docs.map((doc) {
+        var mealData = doc.data() as Map<String, dynamic>;
         return Meal.fromJson(mealData);
       }).toList();
+
+      return res;
     } catch (e) {
       print('Error getting meals from Firestore: $e');
+      return [];
     }
   }
 }
