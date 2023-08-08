@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_meals/features/authentication/application/auth_provider.dart';
 import 'package:my_meals/features/restaurants/application/restaurant_provider.dart';
 import 'package:my_meals/features/restaurants/presentation/tile_screen.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,8 @@ class RestaurantsPage extends StatelessWidget {
     final locProvider = context.read<LocationProvider>();
     final location = locProvider.currentLocation!;
 
+    print(AuthProvider().user);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Restaurants'),
@@ -25,7 +28,10 @@ class RestaurantsPage extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await resProvider.getRestaurants(location.latitude, location.longitude); // Implement the method to fetch restaurants again.
+          await resProvider.getRestaurants(
+              location.latitude,
+              location
+                  .longitude); // Implement the method to fetch restaurants again.
         },
         child: restaurants.isEmpty
             ? Center(

@@ -55,7 +55,7 @@ final appRouter = GoRouter(routes: [
       }
       print(resProvider.restaurants!);
 
-      if (mealProvider.meals.isEmpty && resProvider.restaurants!.isNotEmpty) {
+      if (mealProvider.meals!.isEmpty && resProvider.restaurants!.isNotEmpty) {
         await mealProvider.prepareMealspage(resProvider.restaurants!);
       }
 

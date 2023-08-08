@@ -13,7 +13,9 @@ class User {
       required this.email,
       required this.sex,
       required this.age,
-      required this.preference});
+      required this.preference, 
+      this.id
+      });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -23,17 +25,19 @@ class User {
       sex: json['sex'] as String,
       age: json['age'] as int,
       preference: json['preference'] as String,
+      id: json['id'] as String,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': pid,
+      'pid': pid,
       'name': name,
       'email': email,
       'sex': sex,
       'age': age,
-      'preference': preference
+      'preference': preference,
+      'id': id
     };
   }
 }

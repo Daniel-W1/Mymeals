@@ -29,19 +29,19 @@ class Meal {
 
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
-      id: json['id'] as String,
-      restaurantId: json['restaurantId'] as String?,
-      restaurantName: json['restaurantName'] as String,
-      restaurantAddress: json['restaurantAddress'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      cuisineType: json['cuisineType'] as String,
-      mealType: json['mealType'] as String,
-      imageUrl: json['imageUrl'] as String?,
+      id: json['id'] ?? "",
+      restaurantId: json['restaurantId'] ?? "",
+      restaurantName: json['restaurantName'] ?? "",
+      restaurantAddress: json['restaurantAddress'] ?? "",
+      name: json['name'] ?? "",
+      description: json['description'] ?? "",
+      cuisineType: json['cuisineType'] ?? "",
+      mealType: json['mealType'] ?? "",
+      imageUrl: json['imageUrl'] ?? "",
       ratings: (json['ratings'] as List<dynamic>?)
           ?.map((rating) => MealRating(
-                rating: rating['rating'] as int,
-                userId: rating['userId'] as String,
+                rating: rating['rating'] ?? 0,
+                userId: rating['userId'] ?? 0,
               ))
           .toList() ?? [],
     );

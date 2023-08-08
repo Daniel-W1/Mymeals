@@ -8,14 +8,13 @@ import 'package:my_meals/features/restaurants/application/restaurant_provider.da
 import 'package:my_meals/features/routes/app_routes.dart';
 import 'package:my_meals/firebase_options.dart';
 import 'package:provider/provider.dart';
-
 import 'features/user/application/user_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
+);
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AuthProvider(), lazy: false),

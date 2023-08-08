@@ -84,6 +84,8 @@ class LoginScreen extends StatelessWidget {
                             context,
                             showSnackbar);
 
+                        print(authProvider.user);
+                        print('we are here - --------------------');
                       },
                       child: const Text('Login'),
                     ),
