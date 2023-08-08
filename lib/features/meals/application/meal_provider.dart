@@ -69,12 +69,8 @@ class MealProvider extends ChangeNotifier {
       totalMeals.addAll(response.sublist(0, val));
     }
 
-    print(totalMeals.length);
     await storeMealsToFirestore(totalMeals);
     final res = await getAllMealsFromDatabase();
-    print(res.length);
-    print(totalMeals.length);
-    print('lengths');
 
     _meals = res;
     notifyListeners();
@@ -98,11 +94,8 @@ class MealProvider extends ChangeNotifier {
 
   Future<void> storeMealsToFirestore(List<Meal> meals) async {
     try {
-      var cnt = 0;
       for (var meal in meals) {
         final mealData = meal.toJson();
-        print(cnt++);
-        print(mealData);
         await _mealsCollection.doc(meal.id).set(mealData);
       }
     } catch (e) {

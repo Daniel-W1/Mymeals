@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_meals/features/meals/presentation/meal_detail_screen.dart';
 
+import '../domain/meal_rating.dart';
+
 class MealCard extends StatelessWidget {
   final String id;
   final String imageUrl;
@@ -8,6 +10,7 @@ class MealCard extends StatelessWidget {
   final String? description;
   final String restaurantName;
   final String restaurantAddress;
+  final List<MealRating>? ratings;
 
   const MealCard({
     required this.imageUrl,
@@ -16,6 +19,7 @@ class MealCard extends StatelessWidget {
     this.description,
     required this.restaurantName,
     required this.restaurantAddress,
+    this.ratings,
   });
 
   @override
@@ -39,6 +43,7 @@ class MealCard extends StatelessWidget {
                 description: description,
                 restaurantName: restaurantName,
                 restaurantAddress: restaurantAddress,
+                ratings: ratings,
               ),
             ),
           );

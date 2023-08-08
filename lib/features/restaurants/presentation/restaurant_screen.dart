@@ -50,6 +50,38 @@ class RestaurantsPage extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant_menu),
+            label: 'Meals',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Pick For Me',
+          ),
+        ],
+        currentIndex: 0,
+        selectedItemColor: Colors.deepPurple,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              context.go('/');
+              break;
+            case 1:
+              context.go('/meals');
+              break;
+            case 2:
+              context.go('/pickforme');
+              break;
+          }
+        },
+      ),
     );
   }
 }
