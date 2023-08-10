@@ -15,6 +15,7 @@ class MealDetailPage extends StatefulWidget {
   final String? description;
   final String restaurantName;
   final String restaurantAddress;
+  final List<dynamic>? ratings;
 
   const MealDetailPage({
     required this.imageUrl,
@@ -23,6 +24,7 @@ class MealDetailPage extends StatefulWidget {
     required this.restaurantName,
     required this.restaurantAddress,
     required this.id,
+    this.ratings,
   });
 
   @override
@@ -154,8 +156,11 @@ class _MealDetailPageState extends State<MealDetailPage> {
                             restaurantName: widget.restaurantName,
                             restaurantAddress: widget.restaurantAddress,
                             ratings: [
+                              ...widget.ratings ?? [],
                               MealRating(
-                                  rating: rating.round(), userId: user.uid)
+                                rating: rating.round(),
+                                userId: user.uid,
+                              ),
                             ],
                             cuisineType: "",
                             mealType: "",

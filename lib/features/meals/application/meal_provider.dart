@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:my_meals/core/services/meal_scrapper.dart';
 import 'package:my_meals/features/meals/domain/meal.dart';
-import 'package:my_meals/features/meals/domain/meal_rating.dart';
+import 'package:http/http.dart' as http;
 
 class MealProvider extends ChangeNotifier {
   final CollectionReference _mealsCollection =
@@ -10,7 +12,10 @@ class MealProvider extends ChangeNotifier {
 
   // create a meals and getter for the meals
   List<Meal>? _meals = [];
+  List<Meal>? _topFiveMeals = [];
+
   List<Meal>? get meals => _meals;
+  List<Meal>? get topFiveMeals => _topFiveMeals;
 
   Future<void> createMeal(Meal meal) async {
     final mealData = meal.toJson();
@@ -69,12 +74,8 @@ class MealProvider extends ChangeNotifier {
       totalMeals.addAll(response.sublist(0, val));
     }
 
-    print(totalMeals.length);
     await storeMealsToFirestore(totalMeals);
     final res = await getAllMealsFromDatabase();
-    print(res.length);
-    print(totalMeals.length);
-    print('lengths');
 
     _meals = res;
     notifyListeners();
@@ -98,11 +99,8 @@ class MealProvider extends ChangeNotifier {
 
   Future<void> storeMealsToFirestore(List<Meal> meals) async {
     try {
-      var cnt = 0;
       for (var meal in meals) {
         final mealData = meal.toJson();
-        print(cnt++);
-        print(mealData);
         await _mealsCollection.doc(meal.id).set(mealData);
       }
     } catch (e) {
@@ -119,6 +117,44 @@ class MealProvider extends ChangeNotifier {
       }).toList();
 
       return res;
+    } catch (e) {
+      print('Error getting meals from Firestore: $e');
+      return [];
+    }
+  }
+
+  // write a function to get the top five meals form a flask api given a user id
+  Future<List<Meal>> getTopFiveMeals(String userId) async {
+    try {
+      final baseUrl = 'http://10.0.2.2:5000';
+      print('$baseUrl/getTop5mealForAuser?userId=$userId');
+      final response = await http
+          .get(Uri.parse('$baseUrl/getTop5mealForAuser?userId=$userId'));
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        final top5MealsData = List<Map<String, dynamic>>.from(jsonData);
+
+        _topFiveMeals = top5MealsData.map((mealData) {
+          return Meal(
+            name: mealData['name'] ?? '',
+            imageUrl: mealData['imageUrl'] ?? '',
+            description: mealData['description'] ?? '',
+            cuisineType: mealData['cuisineType'] ?? '',
+            mealType: mealData['mealType'] ?? '',
+            restaurantAddress: mealData['restaurantAddress'] ?? '',
+            restaurantName: mealData['restaurantName'] ?? '',
+            id: mealData['id'] ?? '',
+            ratings: mealData['ratings'] ?? [],
+            restaurantId: mealData['restaurantId'] ?? '',
+          );
+        }).toList();
+
+        return _topFiveMeals ?? [];
+      } else {
+        print('Error getting meals from Firestore: ${response.statusCode}');
+        return [];
+      }
     } catch (e) {
       print('Error getting meals from Firestore: $e');
       return [];

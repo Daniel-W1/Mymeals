@@ -4,11 +4,17 @@ import 'package:my_meals/features/home/presentation/card_screen.dart';
 import 'package:my_meals/features/user/application/user_provider.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
     final userName = userProvider.user != null ? userProvider.user!.name : '';
+    int _selectedIndex = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -93,6 +99,25 @@ class HomeScreen extends StatelessWidget {
             label: 'Pick For Me',
           ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.deepPurple,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              context.go('/');
+              break;
+            case 1:
+              context.go('/meals');
+              break;
+            case 2:
+              context.go('/pickforme');
+              break;
+          }
+
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }

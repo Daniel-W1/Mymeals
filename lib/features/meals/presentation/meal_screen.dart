@@ -4,9 +4,15 @@ import 'package:my_meals/features/meals/presentation/meal_item_screen.dart';
 import 'package:provider/provider.dart';
 import '../application/meal_provider.dart';
 
-class MealsScreen extends StatelessWidget {
+class MealsScreen extends StatefulWidget {
   const MealsScreen({super.key});
 
+  @override
+  State<MealsScreen> createState() => _MealsScreenState();
+}
+
+class _MealsScreenState extends State<MealsScreen> {
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     final mealProvider = context.read<MealProvider>();
@@ -40,8 +46,44 @@ class MealsScreen extends StatelessWidget {
               mealName: meals[index].name,
               restaurantAddress: meals[index].restaurantAddress,
               restaurantName: meals[index].restaurantName,
+              ratings: meals[index].ratings,
             ),
           );
+        },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant_menu),
+            label: 'Meals',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Pick For Me',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.deepPurple,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              context.go('/');
+              break;
+            case 1:
+              context.go('/meals');
+              break;
+            case 2:
+              context.go('/pickforme');
+              break;
+          }
+
+          setState(() {
+            _selectedIndex = index;
+          });
         },
       ),
     );
