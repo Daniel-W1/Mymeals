@@ -11,7 +11,7 @@ class Meal {
   final String restaurantAddress;
   String? imageUrl;
   // create a rating for each meal with userid who rated it
-  List<MealRating>? ratings;
+  List<dynamic>? ratings;
 
   Meal({
     this.id,
@@ -58,7 +58,7 @@ class Meal {
       'restaurantId': restaurantId,
       'restaurantName': restaurantName,
       'restaurantAddress': restaurantAddress,
-      'ratings': ratings?.map((rating) => rating.toJson()).toList(),
+      'ratings': ratings?.map((rating) => rating.toJson()).toList() ?? [],
     };
   }
 }

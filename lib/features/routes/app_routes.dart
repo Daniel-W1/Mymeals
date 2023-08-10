@@ -80,7 +80,24 @@ final appRouter = GoRouter(routes: [
       return resProvider.restaurants != null ? '/restaurants' : '/waiting';
     },
   ),
-  GoRoute(path: '/pickforme', builder: (context, state) => const PickScreen()),
+  GoRoute(
+    path: '/pickforme',
+    builder: (context, state) => const PickScreen(),
+    redirect: (context, state) async {
+      print('we are herere --------------------------------------------');
+      final mealProvider = context.read<MealProvider>();
+      final authProvider = context.read<AuthProvider>();
+      final user_id = authProvider.user!.uid;
+
+      if (mealProvider.topFiveMeals!.isEmpty) {
+        final res = await mealProvider.getTopFiveMeals(user_id);
+
+        print(res);
+      }
+
+      return mealProvider.topFiveMeals != null ? '/pickforme' : '/waiting';
+    },
+  ),
   GoRoute(
     path: '/discounts',
     builder: (context, state) => const DiscountScreen(),

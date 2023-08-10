@@ -10,7 +10,7 @@ class MealCard extends StatelessWidget {
   final String? description;
   final String restaurantName;
   final String restaurantAddress;
-  final List<MealRating>? ratings;
+  final List<dynamic>? ratings;
 
   const MealCard({
     required this.imageUrl,

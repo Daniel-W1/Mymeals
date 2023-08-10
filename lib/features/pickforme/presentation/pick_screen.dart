@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_meals/features/meals/application/meal_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../../meals/domain/meal.dart';
+import '../../meals/presentation/meal_item_screen.dart';
 
 class PickScreen extends StatefulWidget {
   const PickScreen({super.key});
@@ -9,60 +14,37 @@ class PickScreen extends StatefulWidget {
 }
 
 class _PickScreenState extends State<PickScreen> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    final meals = context.read<MealProvider>().topFiveMeals ?? [];
 
-    int _selectedIndex = 0;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pick Screen'),
-        leading: IconButton(
-          onPressed: () {
-            context.go('/');
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-      ),
-      body: Container(
-        child: const Center(
-          child: Text('Pick Screen'),
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant_menu),
-            label: 'Meals',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Pick For Me',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
-        onTap: (index) {
-          switch (index) {
-            case 0:
+        appBar: AppBar(
+          title: const Text('Pick For Me'),
+          leading: IconButton(
+            onPressed: () {
               context.go('/');
-              break;
-            case 1:
-              context.go('/meals');
-              break;
-            case 2:
-              context.go('/pickforme');
-              break;
-          }
-
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
-    );
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
+        ),
+        body: ListView.builder(
+          itemCount: meals.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              child: MealCard(
+                id: meals[index].id!,
+                imageUrl: meals[index].imageUrl!,
+                mealName: meals[index].name,
+                restaurantAddress: meals[index].restaurantAddress,
+                restaurantName: meals[index].restaurantName,
+                ratings: meals[index].ratings,
+              ),
+            );
+          },
+        ));
   }
 }

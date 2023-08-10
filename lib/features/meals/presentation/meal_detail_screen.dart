@@ -15,7 +15,7 @@ class MealDetailPage extends StatefulWidget {
   final String? description;
   final String restaurantName;
   final String restaurantAddress;
-  final List<MealRating>? ratings;
+  final List<dynamic>? ratings;
 
   const MealDetailPage({
     required this.imageUrl,
